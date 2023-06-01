@@ -1,3 +1,4 @@
+import TelaHoje from "./Paginas/TelaHoje";
 import TelaLogin from "./Paginas/TelaLogin";
 import TelaCadastro from "./Paginas/TelaCadastro";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
@@ -10,6 +11,7 @@ export default function App() {
       <Routes>
         <Route path="/" element={<TelaLogin />} />
         <Route path="/cadastro" element={<TelaCadastro />}/>
+        <Route path="/hoje" element={<TelaHoje/>} />
       </Routes>
     </BrowserRouter>
   );

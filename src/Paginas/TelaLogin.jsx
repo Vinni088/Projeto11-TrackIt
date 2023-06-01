@@ -1,15 +1,33 @@
+import axios from "axios";
 import { useState } from "react"
 import styled from "styled-components"
-import { Link } from "react-router-dom";
+import { Link, Navigate, useNavigate } from "react-router-dom";
 import logo from "/src/assets/Logo_PNG.png"
+
 
 export default function TelaLogin() {
     let [email,setEmail] = useState('');
     let [senha,setSenha] = useState('');
+    const url = 'https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/auth/login';
+    const navigate = useNavigate();
 
     function login(e){
         e.preventDefault();
-        alert(` olá ${email}`)
+        let dadosLogin = {
+            email: email,
+            password: senha
+        };
+        let promisse = axios.post(url, dadosLogin);
+        promisse.then(resposta => Sucesso(resposta));
+        promisse.catch(resposta => Fail(resposta));
+    }
+    function Sucesso(resposta) {
+        console.log(resposta);
+        let dados = resposta.data;
+        navigate('/hoje', {state: {dados}});
+    }
+    function Fail(resposta) {
+        console.log(resposta)
     }
     return(
         <LoginBody>
@@ -29,7 +47,7 @@ export default function TelaLogin() {
                     placeholder="Digite sua senha" 
                     onChange={e => setSenha(e.target.value)} />
                     
-                    <button type="submit">Reservar Assento(s)</button> 
+                    <button type="submit">Entrar</button> 
 
                 </form>
             </Form_login>
