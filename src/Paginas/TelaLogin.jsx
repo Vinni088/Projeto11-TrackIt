@@ -1,15 +1,16 @@
 import axios from "axios";
-import { useState } from "react"
-import styled from "styled-components"
-import { Link, Navigate, useNavigate } from "react-router-dom";
-import logo from "/src/assets/Logo_PNG.png"
-
+import styled from "styled-components";
+import { UserContext } from "/src/App.jsx";
+import logo from "/src/assets/Logo_PNG.png";
+import { useContext, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 
 export default function TelaLogin() {
     let [email,setEmail] = useState('');
     let [senha,setSenha] = useState('');
     const url = 'https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/auth/login';
     const navigate = useNavigate();
+    const setUser = useContext(UserContext).setUser;
 
     function login(e){
         e.preventDefault();
@@ -24,7 +25,8 @@ export default function TelaLogin() {
     function Sucesso(resposta) {
         console.log(resposta);
         let dados = resposta.data;
-        navigate('/hoje', {state: {dados}});
+        setUser(dados);
+        navigate('/hoje');
     }
     function Fail(resposta) {
         console.log(resposta)
@@ -37,22 +39,22 @@ export default function TelaLogin() {
 
             <Form_login>
                 <form onSubmit={login}>
-                    <input 
+                    <input data-test="email-input"
                     type="email" value={email} 
                     placeholder="Digite seu email"
                     onChange={e => setEmail(e.target.value)} />
 
-                    <input 
+                    <input data-test="password-input"
                     type="password" value={senha}
                     placeholder="Digite sua senha" 
                     onChange={e => setSenha(e.target.value)} />
                     
-                    <button type="submit">Entrar</button> 
+                    <button data-test="login-btn" type="submit">Entrar</button> 
 
                 </form>
             </Form_login>
             <Link_cadastro>
-                <Link className="link" to={`/cadastro`}>
+                <Link data-test="signup-link" className="link" to={`/cadastro`}>
                     Não tem uma conta? Cadastre-se!
                 </Link>
             </Link_cadastro>
@@ -63,7 +65,6 @@ export default function TelaLogin() {
 }
 
 const LoginBody = styled.div`
-    height: 100vh;
     width: 100vw;
     background: #FFFFFF;
     display: flex;

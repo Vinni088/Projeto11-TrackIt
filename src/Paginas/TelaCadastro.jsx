@@ -40,32 +40,36 @@ export default function TelaCadastro() {
 
             <Form_Cadastro>
                 <form onSubmit={Cadastro}>
-                    <input disabled={botões}
+                    <input data-test="email-input"
+                    disabled={botões}
                     type="email" value={email} 
                     placeholder="Digite seu email"
                     onChange={e => setEmail(e.target.value)} />
 
-                    <input disabled={botões}
+                    <input data-test="password-input"
+                    disabled={botões}
                     type="text" value={senha}
                     placeholder="Digite sua senha" 
                     onChange={e => setSenha(e.target.value)} />
 
-                    <input disabled={botões}
+                    <input data-test="user-name-input"
+                    disabled={botões}
                     type="text" value={nome}
                     placeholder="Digite seu nome" 
                     onChange={e => setNome(e.target.value)} />
 
-                    <input disabled={botões}
+                    <input data-test="user-image-input" 
+                    disabled={botões}
                     type="text" value={foto}
                     placeholder="Digite o link para sua foto" 
                     onChange={e => setFoto(e.target.value)} />
                     
-                    <button disabled={botões} type="submit"> Cadastrar </button> 
+                    <button data-test="signup-btn" disabled={botões} type="submit"> Cadastrar </button> 
 
                 </form>
             </Form_Cadastro>
             <Link_login>
-                <Link className="link" to={`/`}>
+                <Link data-test="login-link" className="link" to={`/`}>
                     Não tem uma conta? Cadastre-se!
                 </Link>
             </Link_login>
