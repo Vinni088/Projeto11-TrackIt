@@ -106,6 +106,7 @@ const Form_login = styled.div`
             background: #52B6FF;
             border-radius: 4.63636px;
             border: 1px solid #FFFFFF;
+            cursor: pointer;
         }
     } 
     
