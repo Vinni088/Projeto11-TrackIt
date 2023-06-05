@@ -33,7 +33,7 @@ export default function TelaHistorico() {
         e.preventDefault();
         setTexto();
         setVisivel(true);
-        setTimeout(requisição,1000);
+        requisição();
     }
     function requisição() {
         let objeto ={

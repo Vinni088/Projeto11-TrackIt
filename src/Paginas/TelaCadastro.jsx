@@ -20,7 +20,7 @@ export default function TelaCadastro() {
         e.preventDefault();
         setBotoes(true);
         setTexto();
-        setTimeout(requisição, 1000);
+        requisição();
     }
     function requisição() {
         let novoCadastro = {
