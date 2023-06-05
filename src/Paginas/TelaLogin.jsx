@@ -37,7 +37,9 @@ export default function TelaLogin() {
         navigate('/hoje');
     }
     function Fail(resposta) {
-        console.log(resposta)
+        alert(`${resposta.response.data.message}`);
+        setBotões(false);
+        setTexto('Entrar')
     }
     return(
         <LoginBody>
