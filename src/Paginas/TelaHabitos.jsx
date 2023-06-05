@@ -40,24 +40,25 @@ export default function TelaHistorico() {
             name: nome,
             days: dias
         }
+        if( nome.length === 0) {
+            alert('Não é permitido criar um hábito sem nome');
+            setTexto('Salvar');
+            setVisivel(false);
+            AdicionarHabito();
+        } else {
         let promisse = axios.post(url_habitos,objeto, chave);
-        promisse.then(resposta => {
-            console.log(resposta);
-            
+        promisse.then(() => {
+            setTexto('Salvar');
+            setVisivel(false);
+            AdicionarHabito();            
+            setAtualize(atualize+1);
+        });
+        promisse.catch(() => {
             setAtualize(atualize+1);
             setTexto('Salvar');
             setVisivel(false);
             AdicionarHabito();
-        });
-        promisse.catch(resposta => {
-            if(resposta.response.data.message === "Campo \"body\" inválido!"){
-                alert('Não é permitido criar um hábito sem nome');
-                setAtualize(atualize+1);
-                setTexto('Salvar');
-                setVisivel(false);
-                AdicionarHabito();
-            }
-        });
+        });}
     }
     function adicionarDia(x){
         if(dias.includes(x)){
