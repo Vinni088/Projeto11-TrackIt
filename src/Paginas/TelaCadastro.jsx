@@ -1,6 +1,7 @@
 import axios from "axios";
 import { useState } from "react"
 import styled from "styled-components";
+import { ThreeDots } from "react-loader-spinner";
 import { Link, useNavigate } from "react-router-dom";
 import logo from "/src/assets/Logo_PNG.png";
 
@@ -10,13 +11,18 @@ export default function TelaCadastro() {
     let [senha, setSenha] = useState('');
     let [nome, setNome] = useState('');
     let [foto, setFoto] = useState('');
-    let [botões, setBotões] = useState(false);
+    let [texto,setTexto] = useState('Cadastrar')
+    let [botoes, setBotoes] = useState(false);
     const url = 'https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/auth/sign-up';
     const navigate = useNavigate();
 
     function Cadastro(e) {
         e.preventDefault();
-        setBotões(true);
+        setBotoes(true);
+        setTexto();
+        setTimeout(requisição, 2000);
+    }
+    function requisição() {
         let novoCadastro = {
             email: email,
             name: nome,
@@ -24,12 +30,10 @@ export default function TelaCadastro() {
             password: senha
         };
         const post = axios.post(url, novoCadastro);
-        
-
         post.then(() => navigate('/'));
         post.catch(resposta => 
             alert(`Houve um problema com seu cadastro: ${resposta.response.data.message}`),
-            setBotões(false)
+            setBotoes(false)
         );    
     }
 
@@ -42,30 +46,32 @@ export default function TelaCadastro() {
             <Form_Cadastro>
                 <form onSubmit={Cadastro}>
                     <input data-test="email-input"
-                    disabled={botões}
+                    disabled={botoes}
                     type="email" value={email} 
                     placeholder="Digite seu email"
                     onChange={e => setEmail(e.target.value)} />
 
                     <input data-test="password-input"
-                    disabled={botões}
+                    disabled={botoes}
                     type="text" value={senha}
                     placeholder="Digite sua senha" 
                     onChange={e => setSenha(e.target.value)} />
 
                     <input data-test="user-name-input"
-                    disabled={botões}
+                    disabled={botoes}
                     type="text" value={nome}
                     placeholder="Digite seu nome" 
                     onChange={e => setNome(e.target.value)} />
 
-                    <input data-test="user-image-input" 
-                    disabled={botões}
+                    <input data-test="user-image-input"
+                    disabled={botoes} 
                     type="text" value={foto}
                     placeholder="Digite o link para sua foto" 
                     onChange={e => setFoto(e.target.value)} />
                     
-                    <button data-test="signup-btn" disabled={botões} type="submit"> Cadastrar </button> 
+                    <button data-test="signup-btn" disabled={botoes} type="submit">
+                        {texto}{<ThreeDots height={'40'} color="#FFFFFF"  visible={botoes}/>} 
+                    </button> 
 
                 </form>
             </Form_Cadastro>
@@ -122,6 +128,9 @@ const Form_Cadastro = styled.div`
             border-radius: 4.63636px;
             border: 1px solid #FFFFFF;
             cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
     } 
     

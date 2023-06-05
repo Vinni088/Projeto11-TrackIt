@@ -3,11 +3,14 @@ import styled from "styled-components";
 import { UserContext } from "/src/App.jsx";
 import logo from "/src/assets/Logo_PNG.png";
 import { useContext, useState } from "react";
+import { ThreeDots } from "react-loader-spinner";
 import { Link, useNavigate } from "react-router-dom";
+
 
 export default function TelaLogin() {
     let [email,setEmail] = useState('');
     let [senha,setSenha] = useState('');
+    let [texto,setTexto] = useState('Entrar')
     let [botões, setBotões] = useState(false);
     const url = 'https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/auth/login';
     const navigate = useNavigate();
@@ -15,11 +18,15 @@ export default function TelaLogin() {
 
     function login(e){
         e.preventDefault();
+        setBotões(true);
+        setTexto();
+        setTimeout(requisição_login, 2000);
+    }
+    function requisição_login(){
         let dadosLogin = {
             email: email,
             password: senha
         };
-        setBotões(true);
         let promisse = axios.post(url, dadosLogin);
         promisse.then(resposta => Sucesso(resposta));
         promisse.catch(resposta => Fail(resposta));
@@ -52,7 +59,9 @@ export default function TelaLogin() {
                     placeholder="Digite sua senha" 
                     onChange={e => setSenha(e.target.value)} />
                     
-                    <button disabled={botões} data-test="login-btn" type="submit">Entrar</button> 
+                    <button disabled={botões} data-test="login-btn" type="submit">
+                        {texto}{<ThreeDots height={'40'} color="#FFFFFF"  visible={botões}/>}
+                    </button> 
 
                 </form>
             </Form_login>
@@ -110,6 +119,9 @@ const Form_login = styled.div`
             border-radius: 4.63636px;
             border: 1px solid #FFFFFF;
             cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
     } 
     
