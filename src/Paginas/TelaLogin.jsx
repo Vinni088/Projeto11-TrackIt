@@ -20,7 +20,7 @@ export default function TelaLogin() {
         e.preventDefault();
         setBotões(true);
         setTexto();
-        setTimeout(requisição_login, 2000);
+        setTimeout(requisição_login, 1000);
     }
     function requisição_login(){
         let dadosLogin = {

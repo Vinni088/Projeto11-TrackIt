@@ -33,7 +33,7 @@ export default function TelaHistorico() {
         e.preventDefault();
         setTexto();
         setVisivel(true);
-        setTimeout(requisição,2000);
+        setTimeout(requisição,1000);
     }
     function requisição() {
         let objeto ={
@@ -47,6 +47,7 @@ export default function TelaHistorico() {
             setAtualize(atualize+1);
             setTexto('Salvar');
             setVisivel(false);
+            AdicionarHabito();
         });
         promisse.catch(resposta => {
             if(resposta.response.data.message === "Campo \"body\" inválido!"){
