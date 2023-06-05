@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import Adicionar from '../assets/plus.svg';
 import deletar from '../assets/dump.svg';
 import { UserContext } from "/src/App.jsx";
+import { ThreeDots } from "react-loader-spinner";
 import { useContext, useEffect, useState } from "react";
 
 export default function TelaHistorico() {
@@ -11,6 +12,8 @@ export default function TelaHistorico() {
     let [habitos,setHabitos] = useState(null);
     let [nome,setNome] = useState('');
     let [dias, setDias] = useState();
+    let [texto,setTexto] = useState('Salvar');
+    let [visivel,setVisivel] = useState(false);
     let [atualize, setAtualize] = useState(0)
     let [NewHabito,setNewHabito] = useState(0);
     const context = useContext(UserContext).User;
@@ -28,6 +31,11 @@ export default function TelaHistorico() {
 
     function novoHabito(e){
         e.preventDefault();
+        setTexto();
+        setVisivel(true);
+        setTimeout(requisição,2000);
+    }
+    function requisição() {
         let objeto ={
             name: nome,
             days: dias
@@ -35,14 +43,32 @@ export default function TelaHistorico() {
         let promisse = axios.post(url_habitos,objeto, chave);
         promisse.then(resposta => {
             console.log(resposta);
-            AdicionarHabito();
+            
             setAtualize(atualize+1);
+            setTexto('Salvar');
+            setVisivel(false);
         });
-        promisse.catch(resposta => {console.log(resposta)});
+        promisse.catch(resposta => {
+            if(resposta.response.data.message === "Campo \"body\" inválido!"){
+                alert('Não é permitido criar um hábito sem nome');
+                setAtualize(atualize+1);
+                setTexto('Salvar');
+                setVisivel(false);
+                AdicionarHabito();
+            }
+        });
     }
     function adicionarDia(x){
-        let currrentdias = [...dias, x];
-        setDias(currrentdias);
+        if(dias.includes(x)){
+            let currrentdias = [...dias];
+            let index = currrentdias.indexOf(x);
+            currrentdias.splice(index, 1);
+            setDias(currrentdias);
+        } else {
+            let currrentdias = [...dias, x];
+            setDias(currrentdias);
+        }
+        
     }
     function AdicionarHabito() {
         if(NewHabito === 0 ) {
@@ -93,32 +119,33 @@ export default function TelaHistorico() {
             <NovoHabito data-test="habit-create-container" ok={NewHabito}>
                 <form onSubmit={novoHabito}>
                     <input data-test="habit-name-input"
+                    disabled={visivel}
                     type="text" value={nome} 
                     placeholder="nome do hábito"
                     onChange={e => setNome(e.target.value)} />
-
-                    <button data-test="habit-create-save-btn" type="submit"> Salvar </button> 
+                    <Cancelar disabled={visivel}  data-test="habit-create-cancel-btn" onClick={()=>AdicionarHabito()}> Cancelar </Cancelar>
+                    <button disabled={visivel} data-test="habit-create-save-btn" type="submit"> {texto}{<ThreeDots height={'30'} color="#FFFFFF"  visible={visivel}/>} </button> 
                 </form>
                 <FormWeekDays>
-                    <WeekDay dias={dias}  cont={0}
+                    <WeekDay disabled={visivel} dias={dias}  cont={0}
                      data-test="habit-day" 
                     onClick={() => adicionarDia(0)} >D</WeekDay>
-                    <WeekDay dias={dias} cont={1}
+                    <WeekDay disabled={visivel} dias={dias} cont={1}
                      data-test="habit-day" 
                     onClick={() => adicionarDia(1)} >S</WeekDay>
-                    <WeekDay dias={dias} cont={2}
+                    <WeekDay disabled={visivel} dias={dias} cont={2}
                      data-test="habit-day" 
                     onClick={() => adicionarDia(2)} >T</WeekDay>
-                    <WeekDay dias={dias} cont={3}
+                    <WeekDay disabled={visivel} dias={dias} cont={3}
                      data-test="habit-day" 
                     onClick={() => adicionarDia(3)} >Q</WeekDay>
-                    <WeekDay dias={dias} cont={4}
+                    <WeekDay disabled={visivel} dias={dias} cont={4}
                      data-test="habit-day" 
                     onClick={() => adicionarDia(4)} >Q</WeekDay>
-                    <WeekDay dias={dias} cont={5}
+                    <WeekDay disabled={visivel} dias={dias} cont={5}
                      data-test="habit-day" 
                     onClick={() => adicionarDia(5)} >S</WeekDay>
-                    <WeekDay dias={dias} cont={6}
+                    <WeekDay disabled={visivel} dias={dias} cont={6}
                      data-test="habit-day" 
                     onClick={() => adicionarDia(6)} >S</WeekDay>
                 </FormWeekDays>
@@ -168,6 +195,7 @@ export default function TelaHistorico() {
 const CorpoHabitos = styled.div`
     width: 100vw;
     height: 100vh;
+    overflow: scroll;
     background: #f2f2f2;
     padding-top: 90px;
     display: flex;
@@ -212,6 +240,7 @@ const HabitosHead = styled.div`
         line-height: 34px;
         text-align: center;
         color: #FFFFFF;
+        cursor: pointer;
     }
 `
 const Menu = styled.div`
@@ -281,9 +310,28 @@ const NovoHabito = styled.div`
         border-radius: 4.63636px;
         border: 1px solid #FFFFFF;
         cursor: pointer;
-        
+        justify-content: center;
+        align-items: center;
     }
     } 
+`
+const Cancelar = styled.h1`
+    position: absolute ;
+    bottom: 24px;
+    right: 120px;
+
+    width: 69px;
+    height: 20px;
+
+    font-family: 'Lexend Deca';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 15.976px;
+    line-height: 20px;
+    text-align: center;
+    color: #52B6FF;
+    opacity: 0.7;
+    cursor: pointer;
 `
 const FormWeekDays = styled.div`
     position: absolute;
@@ -329,6 +377,7 @@ const Habito = styled.div`
         position: absolute;
         right: 15px;
         top: 15px;
+        cursor: pointer;
     }
 `
 const WD_Container = styled.div`
