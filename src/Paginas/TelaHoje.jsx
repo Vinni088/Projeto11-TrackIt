@@ -13,7 +13,7 @@ export default function TelaHoje() {
     let [habitos,setHabitos] = useState(null)
 
     const context = useContext(UserContext).User;
-    const url_habitos = 'https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits/today'
+    const url_habitos_hoje = 'https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits/today'
     const chave = {
         headers: {
             Authorization: `Bearer ${context.token}`
@@ -21,7 +21,7 @@ export default function TelaHoje() {
     }
 
     useEffect(() => {
-        const requisicao = axios.get(url_habitos, chave);
+        const requisicao = axios.get(url_habitos_hoje, chave);
         requisicao.then(resposta => {
             setHabitos(resposta), console.log(resposta);
         });
@@ -55,6 +55,9 @@ export default function TelaHoje() {
                     {weekday(dayjs().day())}, {dayjs().format(' MM-DD ') /*THH:mm:ss SSS [Z] A */}
                 </h1>
             </HojeData>
+
+
+
             <Menu>
                 <DivLink>
                     <Link to={'/habitos'}>
@@ -114,13 +117,16 @@ const Menu = styled.div`
     padding: 0 20px;
 `
 const DivLink = styled.div` 
-    Link {
+    a {
+        width: 68px;
+        height: 22px;
         font-family: 'Lexend Deca';
         font-style: normal;
         font-weight: 400;
-        font-size: 13.976px;
-        line-height: 17px;
+        font-size: 17.976px;
+        line-height: 22px;
         text-align: center;
         color: #52B6FF;
+        cursor: pointer;
     }
 `

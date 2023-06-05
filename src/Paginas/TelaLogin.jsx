@@ -8,6 +8,7 @@ import { Link, useNavigate } from "react-router-dom";
 export default function TelaLogin() {
     let [email,setEmail] = useState('');
     let [senha,setSenha] = useState('');
+    let [botões, setBotões] = useState(false);
     const url = 'https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/auth/login';
     const navigate = useNavigate();
     const setUser = useContext(UserContext).setUser;
@@ -18,12 +19,12 @@ export default function TelaLogin() {
             email: email,
             password: senha
         };
+        setBotões(true);
         let promisse = axios.post(url, dadosLogin);
         promisse.then(resposta => Sucesso(resposta));
         promisse.catch(resposta => Fail(resposta));
     }
     function Sucesso(resposta) {
-        console.log(resposta);
         let dados = resposta.data;
         setUser(dados);
         navigate('/hoje');
@@ -40,16 +41,18 @@ export default function TelaLogin() {
             <Form_login>
                 <form onSubmit={login}>
                     <input data-test="email-input"
+                    disabled={botões}
                     type="email" value={email} 
                     placeholder="Digite seu email"
                     onChange={e => setEmail(e.target.value)} />
 
                     <input data-test="password-input"
+                    disabled={botões}
                     type="password" value={senha}
                     placeholder="Digite sua senha" 
                     onChange={e => setSenha(e.target.value)} />
                     
-                    <button data-test="login-btn" type="submit">Entrar</button> 
+                    <button disabled={botões} data-test="login-btn" type="submit">Entrar</button> 
 
                 </form>
             </Form_login>

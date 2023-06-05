@@ -16,6 +16,7 @@ export default function TelaCadastro() {
 
     function Cadastro(e) {
         e.preventDefault();
+        setBotões(true);
         let novoCadastro = {
             email: email,
             name: nome,
@@ -23,7 +24,7 @@ export default function TelaCadastro() {
             password: senha
         };
         const post = axios.post(url, novoCadastro);
-        setBotões(true);
+        
 
         post.then(() => navigate('/'));
         post.catch(resposta => 
