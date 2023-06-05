@@ -17,6 +17,7 @@ export default function TelaHistorico() {
     const url_habitos = 'https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits';
     const chave = {headers: {Authorization: `Bearer ${context.token}`}};
     const weekdays = [0,1,2,3,4,5,6];
+
     useEffect(() => {
         const requisicao = axios.get(url_habitos, chave);
         setDias([]);
@@ -87,31 +88,38 @@ export default function TelaHistorico() {
                 <h1>
                     Meus hábitos 
                 </h1>
-                <img onClick={()=>AdicionarHabito()} src={Adicionar} alt="Adicionar Hábito" />
+                <img data-test="habit-create-btn" onClick={()=>AdicionarHabito()} src={Adicionar} alt="Adicionar Hábito" />
             </HabitosHead>
-            <NovoHabito ok={NewHabito}>
+            <NovoHabito data-test="habit-create-container" ok={NewHabito}>
                 <form onSubmit={novoHabito}>
-                    <input
+                    <input data-test="habit-name-input"
                     type="text" value={nome} 
                     placeholder="nome do hábito"
                     onChange={e => setNome(e.target.value)} />
 
-                    <button type="submit"> Salvar </button> 
+                    <button data-test="habit-create-save-btn" type="submit"> Salvar </button> 
                 </form>
                 <FormWeekDays>
                     <WeekDay dias={dias}  cont={0}
+                     data-test="habit-day" 
                     onClick={() => adicionarDia(0)} >D</WeekDay>
                     <WeekDay dias={dias} cont={1}
+                     data-test="habit-day" 
                     onClick={() => adicionarDia(1)} >S</WeekDay>
                     <WeekDay dias={dias} cont={2}
+                     data-test="habit-day" 
                     onClick={() => adicionarDia(2)} >T</WeekDay>
                     <WeekDay dias={dias} cont={3}
+                     data-test="habit-day" 
                     onClick={() => adicionarDia(3)} >Q</WeekDay>
                     <WeekDay dias={dias} cont={4}
+                     data-test="habit-day" 
                     onClick={() => adicionarDia(4)} >Q</WeekDay>
                     <WeekDay dias={dias} cont={5}
+                     data-test="habit-day" 
                     onClick={() => adicionarDia(5)} >S</WeekDay>
                     <WeekDay dias={dias} cont={6}
+                     data-test="habit-day" 
                     onClick={() => adicionarDia(6)} >S</WeekDay>
                 </FormWeekDays>
             </NovoHabito>
@@ -120,36 +128,36 @@ export default function TelaHistorico() {
             </h2>
             {habitos.map((habito,indice) => {
                 return(
-                <Habito key={indice}>
-                    <h1>{habito.name}</h1>
+                <Habito data-test="habit-container" key={indice}>
+                    <h1 data-test="habit-name">{habito.name}</h1>
                     <WD_Container>
                         {weekdays.map((dia,index) => {
                             return(
-                            <WD dia={dia} dias={habito.days} key={index}>
+                            <WD data-test="habit-day" dia={dia} dias={habito.days} key={index}>
                                 {translateDay(dia)}
                             </WD>    
                             )
                         })}
                     </WD_Container>
-                    <img onClick={()=>deleteHabit(habito.id)} src={deletar} alt="Deletar Habito"/>
+                    <img data-test="habit-delete-btn" onClick={()=>deleteHabit(habito.id)} src={deletar} alt="Deletar Habito"/>
                 </Habito>
                 )
                 
             })}
 
-            <Menu>
+            <Menu  data-test="menu">
                 <DivLink>
-                    <Link to={'/habitos'}>
+                    <Link data-test="habit-link" to={'/habitos'}>
                         Hábitos
                     </Link>
                 </DivLink>
                 <DivLink>
-                    <Link to={'/hoje'}>
+                    <Link data-test="today-link"  to={'/hoje'}>
                         Hoje
                     </Link>
                 </DivLink>
-                <DivLink to={'/historico'}>
-                    <Link>
+                <DivLink >
+                    <Link data-test="history-link"  to={'/historico'}>
                         Histórico
                     </Link>
                 </DivLink>
@@ -193,10 +201,17 @@ const HabitosHead = styled.div`
     }
     img {
         width: 40px;
-        height: 40px;
+        height: auto;
         background: #52B6FF;
         color: #FFFFFF;
         border-radius: 4.5px;        
+        font-family: 'Lexend Deca';
+        font-style: normal;
+        font-weight: 400;
+        font-size: 26.976px;
+        line-height: 34px;
+        text-align: center;
+        color: #FFFFFF;
     }
 `
 const Menu = styled.div`
@@ -212,14 +227,17 @@ const Menu = styled.div`
     padding: 0 20px;
 `
 const DivLink = styled.div` 
-    Link {
+    a {
+        width: 68px;
+        height: 22px;
         font-family: 'Lexend Deca';
         font-style: normal;
         font-weight: 400;
-        font-size: 13.976px;
-        line-height: 17px;
+        font-size: 17.976px;
+        line-height: 22px;
         text-align: center;
         color: #52B6FF;
+        cursor: pointer;
     }
 `
 const NovoHabito = styled.div`
